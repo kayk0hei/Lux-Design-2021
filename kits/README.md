@@ -48,7 +48,7 @@ Methods:
 
 - `distance_to(pos: Position) -> float` - この [Position](#Position) から `pos` までの [Manhattan (rectilinear) distance](https://en.wikipedia.org/wiki/Taxicab_geometry) を返します。
 
-- direction_to(target_pos: Position) -> DIRECTIONS` - この[Position](#Position)から1歩進んだ場合に、`target_pos`に最も近づくことができる方向を返します。特に、この[Position](#Position)が `target_pos` と等しい場合には、`DIRECTIONS.CENTER` を返します。これは他のユニットとの衝突の可能性をチェックするものではなく、基本的な経路探索方法として機能することに注意してください。
+- `direction_to(target_pos: Position) -> DIRECTIONS` - この[Position](#Position)から1歩進んだ場合に、`target_pos`に最も近づくことができる方向を返します。特に、この[Position](#Position)が `target_pos` と等しい場合には、`DIRECTIONS.CENTER` を返します。これは他のユニットとの衝突の可能性をチェックするものではなく、基本的な経路探索方法として機能することに注意してください。
 
 ### <u>Cell</u>
 
@@ -56,8 +56,8 @@ Properties:
 
 - `pos: Position
 - `resource: Resource` - この[Cell](#Cell)にあるResourceの詳細を含みます。これは他の言語では `None` または `null` に相当するものと同じかもしれません。この[Cell](#Cell)にリソースがあるかどうかを確認するには、常に関数 `has_resource` を使用する必要があります。
-- road: float` - [ユニット](#Unit)がこのタイル上でアクションを行う際に、クールダウンから差し引かれる量です。道路がある場合、その道路が発達しているほど、このクールダウン率の値は高くなります。なお、[ユニット](#Unit)は何かアクションを行うたびに必ず基本のクールダウン量を得る。
-- citytile: CityTile` - この[Cell](#Cell)の上にある都市タイルです。他の言語では、[CityTile](#CityTile)がない場合、`none`または`null`に相当します。
+- `road: float` - [ユニット](#Unit)がこのタイル上でアクションを行う際に、クールダウンから差し引かれる量です。道路がある場合、その道路が発達しているほど、このクールダウン率の値は高くなります。なお、[ユニット](#Unit)は何かアクションを行うたびに必ず基本のクールダウン量を得る。
+- `citytile: CityTile` - この[Cell](#Cell)の上にある都市タイルです。他の言語では、[CityTile](#CityTile)がない場合、`none`または`null`に相当します。
 
 Methods:
 
@@ -87,35 +87,35 @@ Properties:
 
 Methods:
 
-- `can_act() -> bool` - whether this [City](#City) can perform an action this turn, which is when the Cooldown is less than 1
+- `can_act() -> bool` - この[City](#City)がこのターンにアクションを実行できるかどうか、つまりクールダウンが1未満のときは
 
-- `research() -> str` - returns the research action
+- `research() -> str` - 研究活動の成果を返す
 
-- `build_worker() -> str` - returns the build worker action. When applied and requirements are met, a worker will be built at the [City](#City).
+- `build_worker() -> str` - は、Build Workerアクションを返します。適用され、要件が満たされると、[City](#City)にワーカーが構築されます。
 
-- `build_cart() -> str` - returns the build cart action. When applied and requirements are met, a cart will be built at the [City](#City).
+- `build_cart() -> str` - は、カート構築アクションを返します。適用され、要件が満たされると、[City](#City)にカートが構築されます。
 
 ### <u>Unit</u>
 
 Properties:
 
-- `pos: Position` - the [Position](#Position) of this [Unit](#Unit) on the map
-- `team: int` - the id of the team this [Unit](#Unit) belongs to.
-- `id: str` - the id of this [Unit](#Unit). This is unique and cannot be repeated by any other [Unit](#Unit) or [City](#City)
-- `cooldown: float` - the current Cooldown of this [Unit](#Unit). Note that when this is less than 1, the [Unit](#Unit) can perform an action
-- `cargo.wood: int` - the amount of wood held by this [Unit](#Unit)
-- `cargo.coal: int` - the amount of coal held by this [Unit](#Unit)
-- `cargo.uranium: int` - the amount of uranium held by this [Unit](#Unit)
+- `pos: Position` - この[Unit](#Unit)のマップ上の[Position](#Position)です。
+- `team: int` - この[Unit](#Unit)が所属するチームのID。
+- `id: str` - この[Unit](#Unit)のIDです。これはユニークで、他の[Unit](#Unit)や[City](#City)で繰り返すことはできません。
+- `cooldown: float` - この[Unit](#Unit)の現在のクールダウン値です。この値が1より小さい場合、[Unit](#Unit)はアクションを実行できます。
+- `cargo.wood: int` - この[Unit](#Unit)が保持している木材の量。
+- `cargo.cal: int` - この[Unit](#Unit)が持っている石炭の量。
+- `cargo.uranium: int` - この[Unit](#Unit)が持っているウランの量。
 
 Methods:
 
-- `get_cargo_space_left(): int` - この[Unit](#ユニット)のカーゴに残っているスペースの量を返します。例えば、70個の木材は70個のウランと同じだけのスペースを取りますが、70個のウランは[City](#City)に置かれた場合、木材よりもはるかに多くの燃料を生産します。
-- can_build(game_map: GameMap): bool` - [Unit](#Unit)が今いるタイルに[City](#City)を建設できる場合はtrueを、そうでない場合はfalseを返します。それ以外の場合は偽を返します。そのタイルにリソースが存在せず、[Unit](#Unit)のクールダウンが1以下であることを確認する。
-- can_act(): bool` - [Unit](#Unit)がアクションを実行できる場合はtrueを返します。それ以外の場合は False を返します。基本的には、[Unit](#Unit)の Cooldown が 1 より小さいかどうかを調べます。
-- `move(dir): str` - 移動アクションを返します。適用されると、[Unit](#Unit)は指定された方向に[Unit](#Unit)1つ分移動しますが、他のユニットが邪魔していたり、反対側の都市が存在しないことが条件です。([ユニット](#ユニット)は味方の[都市](#都市)の上では重ねることができる)
-- `transfer(dest_id, resourceType, amount): str` - 転送アクションを返します。ターン開始時に両ユニットが隣接している場合、この[ユニット](#ユニット)から選択されたリソースタイプを希望の量だけ、idが`dest_id`の[ユニット](#ユニット)に転送します。(これは、目的地の[ユニット](#ユニット)が他の[ユニット](#ユニット)から資源の譲渡を受けても、その[ユニット](#ユニット)から離れることができることを意味します)
+- `get_cargo_space_left(): int` - この[Unit](#Unit)のカーゴに残っているスペースの量を返します。例えば、70個の木材は70個のウランと同じだけのスペースを取りますが、70個のウランは[City](#City)に置かれた場合、木材よりもはるかに多くの燃料を生産します。
+- `can_build(game_map: GameMap): bool` - [Unit](#Unit)が今いるタイルに[City](#City)を建設できる場合はtrueを、そうでない場合はfalseを返します。それ以外の場合は偽を返します。そのタイルにリソースが存在せず、[Unit](#Unit)のクールダウンが1以下であることを確認する。
+- `can_act(): bool` - [Unit](#Unit)がアクションを実行できる場合はtrueを返します。それ以外の場合は False を返します。基本的には、[Unit](#Unit)の Cooldown が 1 より小さいかどうかを調べます。
+- `move(dir): str` - 移動アクションを返します。適用されると、[Unit](#Unit)は指定された方向に[Unit](#Unit)1つ分移動しますが、他のユニットが邪魔していたり、反対側の都市が存在しないことが条件です。([Unit](#Unit)は味方の[City](#City)の上では重ねることができる)
+- `transfer(dest_id, resourceType, amount): str` - 転送アクションを返します。ターン開始時に両ユニットが隣接している場合、この[Unit](#Unit)から選択されたリソースタイプを希望の量だけ、idが`dest_id`の[Unit](#Unit)に転送します。(これは、目的地の[Unit](#Unit)が他の[Unit](#Unit)から資源の譲渡を受けても、その[Unit](#Unit)から離れることができることを意味します)
 - `build_city(): str` - [City](#City)を構築するアクションを返します。適用されると、[Unit](#Unit)は[City](#City)も資源もない空のタイルで、ワーカーが100ユニットの資源を持っている場合、自分の真下に[City](#City)を建設しようとする。都市の建設に成功した場合、すべての資源は消費される。
-- pillage(): str` - ピレッジアクションを返します。適用されると、[Unit](#Unit)は現在上に乗っているタイルを略奪し、道路レベルの0.5を取り除きます。
+- `pillage(): str` - 略奪アクションを返します。適用されると、[Unit](#Unit)は現在上に乗っているタイルを略奪し、道路レベルの0.5を取り除きます。
 
 ### <u>Player</u>
 
@@ -131,8 +131,8 @@ Properties:
 
 Methods:
 
-- `researched_coal() - bool` - whether or not this player's team has researched coal and can mine coal.
-- `researched_uranium() - bool` - whether or not this player's team has researched uranium and can mine uranium.
+- `researched_coal() - bool` - このプレイヤーのチームが石炭を研究していて、石炭を採掘できるかどうか。
+- `researched_uranium() - bool` - このプレイヤーのチームがウランを研究していて、ウランを採掘できるかどうか。
 
 ### <u>Annotate</u>
 
