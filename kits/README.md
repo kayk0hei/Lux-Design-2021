@@ -74,7 +74,7 @@ Properties:
 
 Methods:
 
-- `get_light_upkeep() -> float` - は、[City](#City)のターンごとに光のアップキープを返します。[City](#City)内の燃料は、夜のターンごとにライトアップキープ分だけ減算される。
+- `get_light_upkeep() -> float` - は、[City](#City)の1ターンで消費されるlight_upkeep（消費燃料量）を返します。[City](#City)内の燃料は、夜のターンごとにlight_upkeep分だけ減算される。
 
 ### <u>CityTile</u>
 
