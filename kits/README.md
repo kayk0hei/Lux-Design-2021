@@ -18,72 +18,72 @@
 
 ### <u>GameMap</u>
 
-The map is organized such that the top left corner of the map is at `(0, 0)` and the bottom right is at `(width - 1, height - 1)`. The map is always square.
+地図は，左上が `(0, 0)`，右下が `(幅 - 1, 高さ - 1)` となるように構成されている。地図は常に正方形である。
 
 Properties:
 
-- `height: int` - the height of the map (along the y direction)
-- `width: int` - the width of the map (along the x direction)
-- `map: List[List[Cell]]` - A 2D array of [Cell](#Cell) objects, defining the current state of the map. `map[y][x]` represents the cell at coordinates (x, y) with `map[0][0]` being the top left Cell.
+- `height: int` - マップの高さ（Y軸方向）です。
+- `width: int` - マップの幅（x方向）です。
+- `map: List[List[Cell]]` - [Cell](#Cell)オブジェクトの2次元配列で、マップの現在の状態を定義します。map[y][x]`は座標(x, y)のセルを表し、`map[0][0]`は左上のセルを表します。
 
 Methods:
 
-- `get_cell_by_pos(pos: Position) -> Cell` - returns the [Cell](#Cell) at the given pos
-- `get_cell(x: int, y: int) -> Cell` - returns the [Cell](#Cell) at the given x, y coordinates
+- `get_cell_by_pos(pos: Position) -> Cell` - 与えられた位置の[Cell](#Cell)を返します。
+- `get_cell(x: int, y: int) -> Cell` - 指定された x, y 座標で [Cell](#Cell) を返します。
 
 ### <u>Position</u>
 
 Properties:
 
-- `x: int` - the x coordinate of the [Position](#Position)
-- `y: int` - the y coordinate of the [Position](#Position)
+- `x: int` - [Position](#Position)の x 座標
+- `y: int` - [Position](#Position)の y 座標
 
 Methods:
 
-- `is_adjacent(pos: Position) -> bool` - returns true if this [Position](#Position) is adjacent to `pos`. False otherwise
+- `is_adjacent(pos: Position) -> bool` - この [Position](#Position) が `pos` に隣接している場合は true を返します。それ以外は False
 
-- `equals(pos: Position) -> bool` - returns true if this [Position](#Position) is equal to the other `pos` object by checking x, y coordinates. False otherwise
+- `equals(pos: Position) -> bool` - x, y 座標を確認して、この [Position](#Position) が他の `pos` オブジェクトと等しい場合は true を返します。それ以外の場合は False を返します。
 
-- `translate(direction: DIRECTIONS, units: int) -> Position` - returns the [Position](#Position) equal to going in a `direction` `units` number of times from this [Position](#Position)
+- `translate(direction: DIRECTIONS, units: int) -> Position` - この [Position](#Position) から `direction` の `units` 倍の方向に進んだときの [Position](#Position) を返します。
 
-- `distance_to(pos: Position) -> float` - returns the [Manhattan (rectilinear) distance](https://en.wikipedia.org/wiki/Taxicab_geometry) from this [Position](#Position) to `pos`
+- `distance_to(pos: Position) -> float` - この [Position](#Position) から `pos` までの [Manhattan (rectilinear) distance](https://en.wikipedia.org/wiki/Taxicab_geometry) を返します。
 
-- `direction_to(target_pos: Position) -> DIRECTIONS` - returns the direction that would move you closest to `target_pos` from this [Position](#Position) if you took a single step. In particular, will return `DIRECTIONS.CENTER` if this [Position](#Position) is equal to the `target_pos`. Note that this does not check for potential collisions with other units but serves as a basic pathfinding method
+- direction_to(target_pos: Position) -> DIRECTIONS` - この[Position](#Position)から1歩進んだ場合に、`target_pos`に最も近づくことができる方向を返します。特に、この[Position](#Position)が `target_pos` と等しい場合には、`DIRECTIONS.CENTER` を返します。これは他のユニットとの衝突の可能性をチェックするものではなく、基本的な経路探索方法として機能することに注意してください。
 
 ### <u>Cell</u>
 
 Properties:
 
-- `pos: Position`
-- `resource: Resource` - contains details of a Resource at this [Cell](#Cell). This may be equal to `None` or `null` equivalents in other languages. You should always use the function `has_resource` to check if this [Cell](#Cell) has a Resource or not
-- `road: float` - the amount of Cooldown subtracted from a [Unit's](#Unit) Cooldown whenever they perform an action on this tile. If there are roads, the more developed the road, the higher this Cooldown rate value is. Note that a [Unit](#Unit) will always gain a base Cooldown amount whenever any action is performed.
-- `citytile: CityTile` - the citytile that is on this [Cell](#Cell). Equal to `none` or `null` equivalents in other languages if there is no [CityTile](#CityTile) here.
+- `pos: Position
+- `resource: Resource` - この[Cell](#Cell)にあるResourceの詳細を含みます。これは他の言語では `None` または `null` に相当するものと同じかもしれません。この[Cell](#Cell)にリソースがあるかどうかを確認するには、常に関数 `has_resource` を使用する必要があります。
+- road: float` - [ユニット](#Unit)がこのタイル上でアクションを行う際に、クールダウンから差し引かれる量です。道路がある場合、その道路が発達しているほど、このクールダウン率の値は高くなります。なお、[ユニット](#Unit)は何かアクションを行うたびに必ず基本のクールダウン量を得る。
+- citytile: CityTile` - この[Cell](#Cell)の上にある都市タイルです。他の言語では、[CityTile](#CityTile)がない場合、`none`または`null`に相当します。
 
 Methods:
 
-- `has_resource() -> bool` - returns true if this [Cell](#Cell) has a non-depleted Resource, false otherwise
+- `has_resource() -> bool` - この[Cell](#Cell)が枯渇していないResourceを持っている場合はtrueを、そうでない場合はfalseを返します。
 
 ### <u>City</u>
 
 Properties:
 
-- `cityid: str` - the id of this [City](#City). Each [City](#City) id in the game is unique and will never be reused by new cities
-- `team: int` - the id of the team this [City](#City) belongs to.
-- `fuel: float` - the fuel stored in this [City](#City). This fuel is consumed by all CityTiles in this [City](#City) during each turn of night.
-- `citytiles: list[CityTile]` - a list of [CityTile](#CityTile) objects that form this one [City](#City) collectively. A [City](#City) is defined as all CityTiles that are connected via adjacent CityTiles.
+- cityid: str` - この[City](#City)のIDです。ゲーム内の各[City](#City)のIDはユニークで、新しい都市で再利用されることはありません。
+- team: int` - この[City](#City)が所属するチームのIDです。
+- fuel: float` - この[City](#City)に蓄えられている燃料です。この燃料はこの[City](#City)にあるすべてのCityTilesが夜のターンに消費します。
+- citytiles: list[CityTile]` - 1つの[City](#City)を構成する[CityTile](#CityTile)オブジェクトのリストです。City](#City)とは、隣接するCityTileを介して接続されているすべてのCityTileを指します。
 
 Methods:
 
-- `get_light_upkeep() -> float` - returns the light upkeep per turn of the [City](#City). Fuel in the [City](#City) is subtracted by the light upkeep each turn of night.
+- `get_light_upkeep() -> float` - は、[City](#City)のターンごとに光のアップキープを返します。都市](#都市)内の燃料は、夜のターンごとにライトアップキープ分だけ減算される。
 
 ### <u>CityTile</u>
 
 Properties:
 
-- `cityid: str` - the id of the [City](#City) this [CityTile](#CityTile) is a part of. Each [City](#City) id in the game is unique and will never be reused by new cities
-- `team: int` - the id of the team this [CityTile](#CityTile) belongs to.
-- `pos: Position` - the [Position](#Position) of this [City](#City) on the map
-- `cooldown: float` - the current Cooldown of this [City](#City).
+- `cityid: str` - は、この[CityTile](#CityTile)が属する[City](#City)のIDです。ゲーム内の各[City](#City)のidはユニークであり、新しい都市で再利用されることはありません。
+- `team: int` - この[CityTile](#CityTile)が所属するチームのIDです。
+- `pos: Position` - この[City]（#City）の地図上の[位置]（#Position）を表示します。
+- `cooldown: float` - この[City](#City)の現在のCooldownです。
 
 Methods:
 
@@ -109,25 +109,25 @@ Properties:
 
 Methods:
 
-- `get_cargo_space_left(): int` - returns the amount of space left in the cargo of this [Unit](#Unit). Note that any Resource takes up the same space, e.g. 70 wood takes up as much space as 70 uranium, but 70 uranium would produce much more fuel than wood when deposited at a [City](#City)
-- `can_build(game_map: GameMap): bool` - returns true if the [Unit](#Unit) can build a [City](#City) on the tile it is on now. False otherwise. Checks that the tile does not have a Resource over it still and the [Unit](#Unit) has a Cooldown of less than 1
-- `can_act(): bool`  - returns true if the [Unit](#Unit) can perform an action. False otherwise. Essentially checks whether the Cooldown of the [Unit](#Unit) is less than 1
-- `move(dir): str` - returns the move action. When applied, [Unit](#Unit) will move in the specified direction by one [Unit](#Unit), provided there are no other units in the way or opposition cities. ([Units](#Unit) can stack on top of each other however when over a friendly [City](#City))
-- `transfer(dest_id, resourceType, amount): str` - returns the transfer action. Will transfer from this [Unit](#Unit) the selected Resource type by the desired amount to the [Unit](#Unit) with id `dest_id` given that both units are adjacent at the start of the turn. (This means that a destination [Unit](#Unit) can receive a transfer of resources by another [Unit](#Unit) but also move away from that [Unit](#Unit))
-- `build_city(): str` - returns the build [City](#City) action. When applied, [Unit](#Unit) will try to build a [City](#City) right under itself provided it is an empty tile with no [City](#City) or resources and the worker is carrying 100 units of resources. All resources are consumed if the city is succesfully built.
-- `pillage(): str` - returns the pillage action. When applied, [Unit](#Unit) will pillage the tile it is currently on top of and remove 0.5 of the road level.
+- `get_cargo_space_left(): int` - この[Unit](#ユニット)のカーゴに残っているスペースの量を返します。例えば、70個の木材は70個のウランと同じだけのスペースを取りますが、70個のウランは[City](#City)に置かれた場合、木材よりもはるかに多くの燃料を生産します。
+- can_build(game_map: GameMap): bool` - [Unit](#Unit)が今いるタイルに[City](#City)を建設できる場合はtrueを、そうでない場合はfalseを返します。それ以外の場合は偽を返します。そのタイルにリソースが存在せず、[Unit](#Unit)のクールダウンが1以下であることを確認する。
+- can_act(): bool` - [Unit](#Unit)がアクションを実行できる場合はtrueを返します。それ以外の場合は False を返します。基本的には、[Unit](#Unit)の Cooldown が 1 より小さいかどうかを調べます。
+- `move(dir): str` - 移動アクションを返します。適用されると、[Unit](#Unit)は指定された方向に[Unit](#Unit)1つ分移動しますが、他のユニットが邪魔していたり、反対側の都市が存在しないことが条件です。([ユニット](#ユニット)は味方の[都市](#都市)の上では重ねることができる)
+- `transfer(dest_id, resourceType, amount): str` - 転送アクションを返します。ターン開始時に両ユニットが隣接している場合、この[ユニット](#ユニット)から選択されたリソースタイプを希望の量だけ、idが`dest_id`の[ユニット](#ユニット)に転送します。(これは、目的地の[ユニット](#ユニット)が他の[ユニット](#ユニット)から資源の譲渡を受けても、その[ユニット](#ユニット)から離れることができることを意味します)
+- `build_city(): str` - [City](#City)を構築するアクションを返します。適用されると、[Unit](#Unit)は[City](#City)も資源もない空のタイルで、ワーカーが100ユニットの資源を持っている場合、自分の真下に[City](#City)を建設しようとする。都市の建設に成功した場合、すべての資源は消費される。
+- pillage(): str` - ピレッジアクションを返します。適用されると、[Unit](#Unit)は現在上に乗っているタイルを略奪し、道路レベルの0.5を取り除きます。
 
 ### <u>Player</u>
 
-This contains information on a particular player of a particular team.
+特定のチームの特定のプレーヤーに関する情報を含みます。
 
 Properties:
 
-- `team: int` - the team id of this player
+- `team: int` - このプレイヤーのチームIDです。
 
-- `research_points: int` - the current total number of research points the player's team has
-- `units: list[Unit]` - a list of every [Unit](#Unit) owned by this player's team.
-- `cities: Dict[str, City]` - a dictionary / map mapping [City](#City) id to each separate [City](#City) owned by this player's team. To get the individual CityTiles, you will need to access the `citytiles` property of the [City](#City).
+- `research_points: int` - このプレイヤーのチームが持っているリサーチポイントの現在の合計数です。
+- `units: list[Unit]` - このプレイヤーのチームが所有するすべての[Unit](#Unit)のリストです。
+- `cities: Dict[str, City]` - [City](#City)のIDと、このプレイヤーのチームが所有する各[City](#City)をマッピングした辞書/マップです。個々のCityTilesを取得するには、[City](#City)の`citytiles`プロパティにアクセスする必要があります。
 
 Methods:
 
@@ -136,24 +136,24 @@ Methods:
 
 ### <u>Annotate</u>
 
-The annotation object lets you create annotation commands that show up on the visualizer when debug mode is turned on. Note that these commands are stripped by competition servers but are available to see when running matches locally.
+アノテーションオブジェクトでは、デバッグモードがオンになっているときにビジュアライザーに表示されるアノテーションコマンドを作成することができます。なお、これらのコマンドは大会サーバーでは削除されますが、ローカルで試合を行う際には見ることができます。
 
 Methods
 
-- `circle(x: int, y: int) -> str` - returns the draw circle annotation action. Will draw a unit sized circle on the visualizer at the current turn centered at the [Cell](#Cell) at the given x, y coordinates
+- `circle(x: int, y: int) -> str` - 円を描くアノテーションアクションを返します。与えられたx, y座標の[Cell](#Cell)を中心に、現在のターンのビジュアライザーに単位サイズの円を描きます。
 
-- `x(x: int, y: int) -> str` - returns the draw X annotation action. Will draw a unit sized X on the visualizer at the current turn centered at the [Cell](#Cell) at the given x, y coordinates
+- `x(x: int, y: int) -> str` - draw Xアノテーションアクションを返します。与えられたx, y座標の[Cell](#Cell)を中心に、現在のターンのビジュアライザーに単位サイズのXを描画します。
 
-- `line(x1: int, y1: int, x2: int, y2: int) -> str` - returns the draw line annotation action. Will draw a line from the center of the [Cell](#Cell) at (x1, y1) to the center of the [Cell](#Cell) at (x2, y2)
+- `line(x1: int, y1: int, x2: int, y2: int) -> str` - 線を引くアノテーションアクションを返します。(x1, y1)の[Cell](#Cell)の中心から(x2, y2)の[Cell](#Cell)の中心まで線を引きます。
 
-- `text(x: int, y: int, message: str, fontsize: int = 16) -> str:` - returns the draw text annotation action. Will write text on top of the tile at (x, y) with the particular message and fontsize
+- `text(x: int, y: int, message: str, fontsize: int = 16) -> str:` - draw text annotation actionを返します。タイルの上の (x, y) に、特定のメッセージとフォントサイズでテキストを書き込みます。
 
-- `sidetext(message: str) -> str:` - returns the draw side text annotation action. Will write text that is displayed on that turn on the side of the visualizer
+- `sidetext(message: str) -> str:` - draw side text annotation actionを返します。ビジュアライザーの側面に、そのターンに表示されるテキストを書き込みます。
 
-Note that all of these will be colored according to the team that created the annotation (blue or orange)
+なお、これらはすべて、アノテーションを作成したチームに応じて色分けされます（青またはオレンジ）。
 
 ### <u>GameConstants</u>
 
-This will contain constants on all game parameters like the max turns, the light upkeep of CityTiles etc.
+このオブジェクトには、最大ターン数やCityTilesのライトアップなど、すべてのゲームパラメータの定数が含まれます。
 
-If there are any crucial changes to the starter kits, typically only this object will change.
+スターターキットに重大な変更があった場合、通常はこのオブジェクトだけが変更されます。
