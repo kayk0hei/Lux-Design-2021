@@ -70,11 +70,11 @@ Properties:
 - `cityid: str` - この[City](#City)のIDです。ゲーム内の各[City](#City)のIDはユニークで、新しい都市で再利用されることはありません。
 - `team: int` - この[City](#City)が所属するチームのIDです。
 - `fuel: float` - この[City](#City)に蓄えられている燃料です。この燃料はこの[City](#City)にあるすべてのCityTilesが夜のターンに消費します。
-- `citytiles: list[CityTile]` - 1つの[City](#City)を構成する[CityTile](#CityTile)オブジェクトのリストです。City](#City)とは、隣接するCityTileを介して接続されているすべてのCityTileを指します。
+- `citytiles: list[CityTile]` - 1つの[City](#City)を構成する[CityTile](#CityTile)オブジェクトのリストです。[City](#City)とは、隣接するCityTileを介して接続されているすべてのCityTileを指します。
 
 Methods:
 
-- `get_light_upkeep() -> float` - は、[City](#City)のターンごとに光のアップキープを返します。都市](#都市)内の燃料は、夜のターンごとにライトアップキープ分だけ減算される。
+- `get_light_upkeep() -> float` - は、[City](#City)のターンごとに光のアップキープを返します。[City](#City)内の燃料は、夜のターンごとにライトアップキープ分だけ減算される。
 
 ### <u>CityTile</u>
 
