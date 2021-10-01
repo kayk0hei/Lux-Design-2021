@@ -1,20 +1,20 @@
 # Lux AI Season 1 Kits
 
-This folder contains all official kits provided by the Lux AI team for the Lux AI Challenge Season 1.
+このフォルダには、Lux AIチームがLux AI Challenge Season 1のために提供したすべての公式キットが含まれています。
 
-In each starter kit folder is a README and a folder called `simple` which gives you all the tools necessary to compete. Make sure to read the README document carefully. For debugging, you may log to standard error e.g. `console.error` or `print("hello", file=sys.stderr)`, this will be recorded and saved into a errorlogs folder for the match for each agent and will be recorded by the competition servers. You can also try out the [debug annotations](#Annotate) commands to draw onto the replay.
+各スターターキットのフォルダの中には、READMEと、競技に必要なすべてのツールを提供する`simple`というフォルダが入っています。READMEの文書をよく読むようにしてください。デバッグの際には、`console.error`や`print("hello", file=sys.stderr)`などの標準エラーにログを取ることができます。これは各エージェントの試合のerrorlogsフォルダに記録・保存され、競技サーバーにも記録されます。また、[debug annotations](#Annotate)コマンドを使って、リプレイに絵を描くこともできますのでお試しください。
 
 ## API
 
-This section details the general API each kit adheres to. It follows the conventions of Python but other kits are exactly the same, differing only in syntax and naming conventions. Any individual difference should be noted in the comments in the kits themselves.
+このセクションでは、各キットが準拠している一般的なAPIについて詳しく説明します。ここではPythonの規約に従っていますが、他のキットも全く同じで、構文や命名規則が異なるだけです。個々の違いについては、各キットのコメントに記載されています。
 
-Some methods you may notice are for generating an **action**, e.g. moving a [Unit](#Unit), transferring resources, building units. These action methods always return a string, which should be added to the `actions` array, of which there are examples of how to do so in the starter kits.
+いくつかのメソッドは**アクション**を生成するものです。例えば、[Unit](#Unit)の移動、リソースの移動、ユニットの構築などです。これらのアクションメソッドは常に文字列を返すので、`actions`配列に追加する必要があり、スターターキットにはその方法の例があります。
 
 ### game_state
 
-The `game_state` object is provided to you and contains the complete information about the current state of the game at the current turn `game_state.turn`. Each agent/player in the game has an id, with your bot's id equal to `game_state.id` and the other team's id being `(game_state.id + 1) % 2`.
+game_state` オブジェクトは、現在のターン `game_state.turn` におけるゲームの現在の状態についての完全な情報を含んでいます。ゲーム内の各エージェントやプレイヤーにはidがあり、自分のボットのidは `game_state.id` となり、他のチームのidは `(game_state.id + 1) % 2` となります。
 
-Additionally in the game state, are the following nested objects, `map` of type [GameMap](#GameMap), and `players` which is a list with two [Player](#Player) objects indexed by the player's team id. The kits will show how to retrieve those objects. The rest of this section details the properties and methods of each type of object used in the kits.
+また、ゲームステートの中には、[GameMap](#GameMap)タイプの`map`と、プレイヤーのチームIDでインデックスされた2つの[Player](#Player)オブジェクトのリストである`players`というネストされたオブジェクトがあります。キットでは、これらのオブジェクトを取得する方法を説明します。このセクションの残りの部分では、キットで使用される各タイプのオブジェクトのプロパティとメソッドの詳細を説明します。
 
 ### <u>GameMap</u>
 
